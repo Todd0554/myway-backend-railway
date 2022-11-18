@@ -16,11 +16,11 @@ afterAll(async () => {
 })
 
 // test server start request '/'
-describe("GET /", () => {
-  it("should respond with a 200 status code", async () => {
-      await request(app).get('/').expect(200).expect('Content-Type', /json/)
-    })
-})
+// describe("GET /", () => {
+//   it("should respond with a 200 status code", async () => {
+//       await request(app).get('/').expect(200).expect('Content-Type', /json/)
+//     })
+// })
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 

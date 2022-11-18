@@ -39,7 +39,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 // configure cors
 var corsOptions = {
-    origin: ["http://localhost:3000"],
+    origin: ["http://localhost:3000", "https://radiant-belekoy-ffd379.netlify.app"],
     optionsSuccessStatus: 200
 }
 app.use(cors(corsOptions))

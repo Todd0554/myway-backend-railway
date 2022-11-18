@@ -24,10 +24,14 @@ These api can be used like this (e.g https://myway-backend.herokuapp.com/api/sit
 - POST /api/blogs/:id/comments
 - DELETE /api/blogs/:id/comments/:commentId
   
-## Users
+## Users:  
 - POST api/users/login
 - POST api/users/register
 - GET api/users/profile
 - PUT api/users/profile
 - GET api/users
 - DELETE api/users/:id
+
+## image:  
+- POST api/images/upload
+- GET api/images/download
