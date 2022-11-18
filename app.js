@@ -16,13 +16,13 @@ dotenv.config();
 
 const app = express();
 
-// app.use(function (req, res, next) {
-//   res.setHeader(
-//     'Content-Security-Policy-Report-Only',
-//     "default-src 'self' https://ka-f.fontawesome.com; font-src 'self' https://ka-f.fontawesome.com; img-src 'self' https://images.unsplash.com https://maps.gstatic.com; script-src 'self' https://kit.fontawesome.com/56a258cb08.js https://maps.googleapis.com; style-src 'self' https://fonts.googleapis.com/; frame-src 'self'"
-//   );
-//   next();
-// });
+app.use(function (req, res, next) {
+  res.setHeader(
+    'Content-Security-Policy-Report-Only',
+    "default-src 'self' https://ka-f.fontawesome.com; font-src 'self' https://ka-f.fontawesome.com; img-src 'self' https://images.unsplash.com https://maps.gstatic.com; script-src 'self' https://kit.fontawesome.com/56a258cb08.js https://maps.googleapis.com; style-src 'self' https://fonts.googleapis.com/; frame-src 'self'"
+  );
+  next();
+});
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
