@@ -13,8 +13,19 @@ import blogRoutes from "./routes/blogRoutes.js";
 import uploadRoutes from "./routes/uploadRoutes.js";
 
 dotenv.config();
-
+void process.on('unhandledRejection', (reason, p) => {
+    console.log(`Here is the BIG ERROR: \n`.red + p)
+    console.log(`That's because of: \n`.red + reason)
+})
 const app = express();
+app.use(helmet())
+app.use(helmet.permittedCrossDomainPolicies())
+app.use(helmet.referrerPolicy())
+app.use(helmet.contentSecurityPolicy({
+    directives: {
+        defaultSrc: ["'self'"]
+    }
+}))
 
 app.use(function (req, res, next) {
   res.setHeader(
@@ -26,6 +37,12 @@ app.use(function (req, res, next) {
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+// configure cors
+var corsOptions = {
+    origin: ["http://localhost:3000"],
+    optionsSuccessStatus: 200
+}
+app.use(cors(corsOptions))
 
 app.use("/api/sites", siteRoutes);
 app.use("/api/users", userRoutes);
@@ -34,9 +51,6 @@ app.use('/api/upload', uploadRoutes)
 // upload folder used as static files folder 
 const __dirname = path.resolve()
 app.use('/upload', express.static(path.join(__dirname, '/upload')))
-
-
-
 
 
 
