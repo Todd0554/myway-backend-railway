@@ -47,10 +47,11 @@ app.use(cors(corsOptions))
 app.use("/api/sites", siteRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/blogs", blogRoutes);
-app.use('/api/upload', uploadRoutes)
-// upload folder used as static files folder 
-const __dirname = path.resolve()
-app.use('/upload', express.static(path.join(__dirname, '/upload')))
+app.use('/api/image', uploadRoutes)
+
+// // upload folder used as static files folder 
+// const __dirname = path.resolve()
+// app.use('/upload', express.static(path.join(__dirname, '/upload')))
 
 
 
