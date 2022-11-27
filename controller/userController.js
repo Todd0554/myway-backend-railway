@@ -43,9 +43,6 @@ export const userRegister = asyncHandler(async (req, res) => {
       isAdmin: user.isAdmin,
       token: generateToken(user._id),
     });
-  } else {
-    res.status(400);
-    throw new Error("User is existed!");
   }
 });
 
@@ -63,9 +60,6 @@ export const userProfile = asyncHandler(async (req, res) => {
       email: user.email,
       isAdmin: user.isAdmin,
     });
-  } else {
-    res.status(404);
-    throw new Error("User is not existed!");
   }
 });
 
@@ -89,9 +83,6 @@ export const updateUserProfile = asyncHandler(async (req, res) => {
       isAdmin: updateUser.isAdmin,
       token: generateToken(updateUser._id),
     });
-  } else {
-    res.status(404);
-    throw new Error("User is not existed!");
   }
 });
 
@@ -114,8 +105,5 @@ export const deleteUser = asyncHandler(async (req, res) => {
     await user.remove();
     res.status(200);
     res.json({ message: "User removed successfully!" });
-  } else {
-    res.status(404);
-    throw new Error("User is not existed!");
   }
 });

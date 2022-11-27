@@ -1,4 +1,3 @@
-import path from 'path'
 import express from "express";
 import dotenv from "dotenv";
 import colors from "colors";
@@ -23,7 +22,7 @@ app.use(helmet.permittedCrossDomainPolicies())
 app.use(helmet.referrerPolicy())
 app.use(helmet.contentSecurityPolicy({
     directives: {
-        defaultSrc: ["'self'"]
+        defaultSrc: ["'self'"] 
     }
 }))
 

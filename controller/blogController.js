@@ -21,9 +21,6 @@ export const getBlogById = asyncHandler(async (req, res) => {
   if (blog) {
     res.status(200);
     res.json(blog);
-  } else {
-    res.status(404);
-    throw new Error("No blog found.");
   }
 });
 
@@ -46,9 +43,6 @@ export const getBlogsByUserId = asyncHandler(async (req, res) => {
   if (blogs && blogs.length !== 0) {
     res.status(200);
     res.json(blogs);
-  } else {
-    res.status(404);
-    throw new Error("No blogs found.");
   }
 });
 
@@ -66,9 +60,6 @@ export const deleteBlogById = asyncHandler(async (req, res) => {
       res.status(401);
       throw new Error("You are not authorized to delete this blog!");
     }
-  } else {
-    res.status(404);
-    throw new Error("not found this blog!");
   }
 });
 
@@ -88,8 +79,6 @@ export const createBlogComment = asyncHandler(async (req, res) => {
     blog.numComments = blog.comments.length;
     await blog.save();
     res.status(201).json({ message: "Successfully add comment." });
-  } else {
-    res.status(404).json("Blog not found!");
   }
 });
 
@@ -108,7 +97,5 @@ export const deleteBlogComment = asyncHandler(async (req, res) => {
       await blog.save();
       res.status(201).json({ message: "Successfully delete comment." });
     }
-  } else {
-    res.status(404).json("Blog not found!");
   }
 });

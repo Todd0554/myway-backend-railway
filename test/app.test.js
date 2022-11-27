@@ -5,8 +5,6 @@ import Site from '../models/siteModel.js'
 import User from '../models/userModel.js'
 import Blog from '../models/blogModel.js'
 
-jest.useRealTimers();
-
 beforeAll(async () => {
   await mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true })
 })
@@ -14,14 +12,6 @@ beforeAll(async () => {
 afterAll(async () => {
   await mongoose.connection.close()
 })
-
-// test server start request '/'
-// describe("GET /", () => {
-//   it("should respond with a 200 status code", async () => {
-//       await request(app).get('/').expect(200).expect('Content-Type', /json/)
-//     })
-// })
-
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 // test sites API
@@ -44,7 +34,38 @@ describe("sites", () => {
         expect(site.body.name).toBe("name of the site");
       })
     })
+    // API test: POST /api/sites/:id/comments
+    describe('POST /api/sites/:id/comments', () => {
+      it("should post a comment for a site", async () => {
+        const response = await request(app).post('/api/users/login').send({
+          email: "admin@example.com",
+          password: "123456"
+        });
+        const token = await response.body.token;
+        const targetSite = await Site.findOne({name: "name of the site"})
+        const siteId = await targetSite._id
+        const commentResponse = await request(app).post(`/api/sites/${siteId}/comments`).send({
+          content: "new comment!"
+        }).set('Content-Type', 'application/json').set('Authorization', `Bearer ${token}`)
+        expect(commentResponse.body.message).toBe("Successfully add comment.");
+      })
+    })
 
+    // API test: DELETE /api/sites/:id/comments/:commentId
+    describe('DELETE /api/sites/:id/comments/:commentId', () => {
+      it("should delete a comment for a site", async () => {
+        const response = await request(app).post('/api/users/login').send({
+          email: "admin@example.com",
+          password: "123456"
+        });
+        const token = await response.body.token;
+        const targetSite = await Site.findOne({name: "name of the site"})
+        const siteId = await targetSite._id
+        const commentId = targetSite.comments[targetSite.comments.length - 1]._id
+        const commentResponse = await request(app).delete(`/api/sites/${siteId}/comments/${commentId}`).set('Authorization', `Bearer ${token}`)
+        expect(commentResponse.body.message).toBe("Successfully delete comment.");
+      })
+    })    
     // API test: GET /api/sites/:id
     describe('GET /api/sites/:id', () => {
       describe('given the site not exist',() => {
@@ -109,28 +130,53 @@ describe("sites", () => {
 describe("users", () => {
   // API test: POST api/users/login
   describe("POST api/users/login", () => {
-    it("should response with 200", async () => {
-      const response = await request(app).post('/api/users/login').send({
-        email: 'todd@example.com',
-        password: '123456'
+    describe("should response with 200 and right user name", () => {
+      it("should response with 200", async () => {
+        const response = await request(app).post('/api/users/login').send({
+          email: 'todd@example.com',
+          password: '123456'
+        })
+        expect(response.statusCode).toBe(200)
+        expect(response.body.name).toBe('todd')
       })
-      expect(response.statusCode).toBe(200)
-      expect(response.body.name).toBe('todd')
+    })
+    describe("should response with 401", () => {
+      it("should response with 200", async () => {
+        const response = await request(app).post('/api/users/login').send({
+          email: 'todd@example.com',
+          password: '1234'
+        })
+        expect(response.statusCode).toBe(401)
+      })
     })
   })
 
+
   // API test: POST api/users/register
   describe("POST api/users/register", () => {
-    it("should response with 201", async () => {
-      const response = await request(app).post('/api/users/register').send({
-        name: "heyhey",
-        email: 'heyhey@example.com',
-        password: '123456'
+    describe("should response with 201 and right data", () => {
+      it("should response with 201", async () => {
+        const response = await request(app).post('/api/users/register').send({
+          name: "heyhey",
+          email: 'heyhey@example.com',
+          password: '123456'
+        })
+        expect(response.statusCode).toBe(201)
+        expect(response.body.name).toBe('heyhey')
+        // this new user will be deleted in the deleting test "DELETE api/users/:id"
       })
-      expect(response.statusCode).toBe(201)
-      expect(response.body.name).toBe('heyhey')
-      // this new user will be deleted in the deleting test "DELETE api/users/:id"
     })
+    describe("should response with 400", () => {
+      it("should response with 400", async () => {
+        const response = await request(app).post('/api/users/register').send({
+          name: "Admin",
+          email: 'admin@example.com',
+          password: '123456'
+        })
+        expect(response.statusCode).toBe(400)
+      })
+    })
+    
   })
 
   // API test: GET api/users
@@ -211,6 +257,38 @@ describe("blogs", () => {
       expect(response.body.title).toBe("Blog test title.")
     })
   })
+    // API test: POST /api/blogs/:id/comments
+    describe('POST /api/blogs/:id/comments', () => {
+      it("should post a comment for a site", async () => {
+        const response = await request(app).post('/api/users/login').send({
+          email: "admin@example.com",
+          password: "123456"
+        });
+        const token = await response.body.token;
+        const targetBlog = await Blog.findOne({title: "Blog test title."})
+        const blogId = await targetBlog._id
+        const commentResponse = await request(app).post(`/api/blogs/${blogId}/comments`).send({
+          content: "new comment!"
+        }).set('Content-Type', 'application/json').set('Authorization', `Bearer ${token}`)
+        expect(commentResponse.body.message).toBe("Successfully add comment.");
+      })
+    })
+
+    // API test: DELETE /api/blogs/:id/comments/:commentId
+    describe('DELETE /api/blogs/:id/comments/:commentId', () => {
+      it("should delete a comment for a blog", async () => {
+        const response = await request(app).post('/api/users/login').send({
+          email: "admin@example.com",
+          password: "123456"
+        });
+        const token = await response.body.token;
+        const targetBlog = await Blog.findOne({title: "Blog test title."})
+        const blogId = await targetBlog._id
+        const commentId = targetBlog.comments[targetBlog.comments.length - 1]._id
+        const commentResponse = await request(app).delete(`/api/blogs/${blogId}/comments/${commentId}`).set('Authorization', `Bearer ${token}`)
+        expect(commentResponse.body.message).toBe("Successfully delete comment.");
+      })
+    })  
 
     // API test: GET api/blogs
     describe("GET api/blogs", () => {
