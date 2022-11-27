@@ -1,8 +1,12 @@
 # MyWay backend server 
-### The backend is deployed in heroku.  
-URL: https://myway-backend.herokuapp.com  
-The APIs path are shown below:  
-These api can be used like this (e.g https://myway-backend.herokuapp.com/api/sites)  
+### ~~The backend is deployed in heroku.~~  
+~~URL: https://myway-backend.herokuapp.com~~  
+~~The APIs path are shown below:~~  
+~~These api can be used like this (e.g https://myway-backend.herokuapp.com/api/sites)~~   
+### Redeploy by using Railway:
+URL: https://myway-backend-railway-production.up.railway.app/
+These api can be used like this:  
+e.g. https://myway-backend-railway-production.up.railway.app/api/sites
 
 ## Sites:  
 
